@@ -1,1 +1,122 @@
 # Wallpaper
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hidden Controls Gradient</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .gradient {
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle, rgba(102,166,255,1) 0%, white 100%);
+      transition: background 0.5s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .controls {
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+
+    .controls.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    button, input {
+      font-size: 14px;
+      border-radius: 8px;
+      border: 2px solid #aaa;
+      padding: 6px 12px;
+      transition: background 0.3s;
+    }
+
+    #colorBtn {
+      position: absolute;
+      bottom: 40px;
+    }
+
+    #styleBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 12px;
+    }
+
+    #colorInput {
+      position: absolute;
+      top: 10px;
+      left: 120px;
+      font-size: 14px;
+    }
+
+    button:hover, input:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="gradient" id="gradient" ondblclick="toggleControls()">
+    <div class="controls" id="controls">
+      <button id="colorBtn" onclick="changeGradientColor()">Change Color</button>
+      <button id="styleBtn" onclick="toggleGradientType()">Toggle Style</button>
+      <input id="colorInput" type="text" placeholder="Enter color" />
+    </div>
+  </div>
+
+  <script>
+    let currentGradientType = 'radial';
+
+    function getRandomColor() {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgba(${r}, ${g}, ${b}, 1)`;
+    }
+
+    function applyGradient(color) {
+      const gradientDiv = document.getElementById('gradient');
+      if (currentGradientType === 'radial') {
+        gradientDiv.style.background = `radial-gradient(circle, ${color} 0%, white 100%)`;
+      } else {
+        gradientDiv.style.background = `linear-gradient(to bottom right, ${color}, white)`;
+      }
+    }
+
+    function changeGradientColor() {
+      const color = getRandomColor();
+      applyGradient(color);
+    }
+
+    function toggleGradientType() {
+      currentGradientType = currentGradientType === 'radial' ? 'linear' : 'radial';
+      const inputColor = document.getElementById('colorInput').value || getRandomColor();
+      applyGradient(inputColor);
+    }
+
+    function toggleControls() {
+      const controls = document.getElementById('controls');
+      controls.classList.toggle('show');
+    }
+
+    document.getElementById('colorInput').addEventListener('change', () => {
+      const color = document.getElementById('colorInput').value;
+      if (color.trim() !== '') {
+        applyGradient(color);
+      }
+    });
+  </script>
+</body>
+</html>
